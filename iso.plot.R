@@ -16,17 +16,22 @@ function(datalist = list(), group = 0){
   mixture <- datalist$mixture
   snum <- nrow(sources)
   mnum <- nrow(mixture)
-  xr <- max(sources[, 1], sources[, 3], mixture[, 1]) + mean(sources[, 1])
-  xl <- min(sources[, 1], sources[, 3], mixture[, 1]) - mean(sources[, 1])
-  yr <- max(sources[, 2], sources[, 6], mixture[, 2]) + mean(sources[, 2])
-  yl <- min(sources[, 2], sources[, 6], mixture[, 2]) - mean(sources[, 2])
+  xr <- max(sources[, 4]) + 2 * sources[which.max(sources[, 4]), 3]
+  xl <- min(sources[, 4]) - 2 * sources[which.min(sources[, 4]), 3]
+  yr <- max(sources[, 6]) + 2 * sources[which.max(sources[, 6]), 5]
+  yl <- min(sources[, 6]) - 2 * sources[which.min(sources[, 6]), 5]
   plot(1,1, type = "n", xlim = c(xl, xr), ylim = c(yl, xr), main = "Mixture and Source data dot plot", xlab = colnames(mixture)[1], ylab = colnames(mixture)[2])
   for(i in 1 : snum){
-    points(sources[i, 4], sources[i, 6], col = i, pch = i + 4, bg = i)
-    lines(c(sources[i, 4] - sources[i, 3], sources[i, 4] + sources[i, 3]), c(sources[i, 6], sources[i, 6]), col = i) #error bar at x axis
-    lines(c(sources[i, 4], sources[i, 4]), c(sources[i, 6] - sources[i, 5], sources[i, 6] + sources[i, 5]), col = i) #errow bar at y axis
+    points(sources[i, 4], sources[i, 6], col = i, pch = i + 5, bg = i)
+    lines(c(qnorm(p = 0.05, mean = sources[i, 4], sd = sources[i, 3]), qnorm(p = 0.95, mean = sources[i, 4], sd = sources[i, 3])), 
+          c(sources[i, 6], sources[i, 6]), col = i) #error bar at x axis
+    lines(c(sources[i, 4], sources[i, 4]), 
+          c(qnorm(p = 0.05, mean = sources[i, 6], sd = sources[i, 5]), qnorm(p = 0.95, mean = sources[i, 6], sd = sources[i, 5])), col = i) #errow bar at y axis
   }
   for(j in 1 : mnum){
     points(mixture[j, 1], mixture[j, 2], cex = 1.2, pch = 16, col = "darkblue")
   }
+  le.pch <- c(1:snum) + 5
+  le.text <- rownames(sources)
+  legend("topright", legend = le.text, pch = le.pch)
 }
