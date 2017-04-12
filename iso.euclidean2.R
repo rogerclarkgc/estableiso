@@ -33,12 +33,9 @@ function(source.matrix = 0 , mixture.matrix = 0 ,correctiso.matrix = NULL)
     {
       source.sample <- c(rnorm(1, mean = source.matrix[i, 4], sd = source.matrix[i, 3]), rnorm(1, mean = source.matrix[i, 6], sd = source.matrix[i, 5]))  	#get the rnorm density for source i
       
-      if(source.sample[1] >= 1 & source.sample[2] >= 1)
-      {		
-        source.sample <- c("NULL")
-      }
-      else
-      {
+      
+      
+      
         
         rho <- euclideanmetric(source.sample, mixture.matrix) #caculate the euclidean metric between mixture and 1 rnorm sample
         source.sample[3] <- rho
@@ -48,7 +45,7 @@ function(source.matrix = 0 , mixture.matrix = 0 ,correctiso.matrix = NULL)
         cat("random source sample :", source.sample,"  ")
         cat("this is the",j, "round!\n")
         j <- j + 1
-      }
+      
       attributes(sample.matrix)$names <- c(colnames(source.matrix)[1], colnames(source.matrix)[2], "rho")    
     }
     sample.list [[i]] <- sample.matrix

@@ -6,10 +6,14 @@ iso.polygon <- function(sources, mixture, TEF = 0, its = 1500, res = 250){
   min.1.n <- which(sources[, 1] == min(sources[, 1]))
   max.2.n <- which(sources[, 3] == max(sources[, 3]))
   min.2.n <- which(sources[, 3] == min(sources[, 3]))
-  iso_1_max <- qnorm(.999999, mean = sources[max.1.n, 1], sd = sources[max.1.n, 2]) * 1.5
-  iso_1_min <- qnorm(.1, mean = sources[min.1.n, 1], sd = sources[min.1.n, 2]) * 1.5
-  iso_2_max <- qnorm(.999999, mean = sources[max.2.n, 3], sd = sources[max.2.n, 4]) *0.2
-  iso_2_min <- qnorm(.1, mean = sources[min.2.n, 3], sd = sources[min.2.n, 4]) * 1.5
+  #iso_1_max <- qnorm(.999999, mean = sources[max.1.n, 1], sd = sources[max.1.n, 2])
+  iso_1_max <- 30
+  #iso_1_min <- qnorm(.1, mean = sources[min.1.n, 1], sd = sources[min.1.n, 2])
+  iso_1_min <- -8
+  #iso_2_max <- qnorm(.999999, mean = sources[max.2.n, 3], sd = sources[max.2.n, 4])
+  iso_2_max <- 24
+  #iso_2_min <- qnorm(.1, mean = sources[min.2.n, 3], sd = sources[min.2.n, 4])
+  iso_2_min <- -2
   #return(list(iso_1_min, iso_1_max, iso_2_min, iso_2_max, max.2.n, min.2.n))
   step_1 <- (iso_1_max - iso_1_min)/(res - 1)
   step_2 <- (iso_2_max - iso_2_min)/(res - 1)
@@ -17,7 +21,8 @@ iso.polygon <- function(sources, mixture, TEF = 0, its = 1500, res = 250){
   seq_2 <- seq(iso_2_min, iso_2_max, by = step_2)
   m_x <- outer(seq_2*0, seq_1, FUN = "+")
   m_y <- outer(seq_2, seq_1*0, FUN = "+")
-  m_y_f <- m$y[res:1, ]
+  #m_y_f <- m$y[res:1, ]
+  m_y_f <- m_y[res:1, ]
   m <- list(x = m_x, y = m_y, y_f = m_y_f)
   Par_values <- array(0, c(its, (nrow(sources)*4 + 3)))
   p <- array(0, (c(its, nrow(mixture))))
